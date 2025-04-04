@@ -1,6 +1,7 @@
 #include "Components/SceneComponent.h"
 #include "Math/JungleMath.h"
 #include "UObject/ObjectFactory.h"
+#include "UObject/Casts.h"
 
 USceneComponent::USceneComponent()
     : RelativeLocation(FVector(0.f, 0.f, 0.f))
@@ -18,6 +19,19 @@ void USceneComponent::InitializeComponent()
 void USceneComponent::TickComponent(float DeltaTime)
 {
 	Super::TickComponent(DeltaTime);
+}
+
+UObject* USceneComponent::Duplicate()
+{
+    USceneComponent* NewComponent = Cast<USceneComponent>(Super::Duplicate());
+    if (!NewComponent)
+        return nullptr;
+
+    NewComponent->RelativeLocation = RelativeLocation;
+    NewComponent->RelativeRotation = RelativeRotation;
+    NewComponent->QuatRotation = QuatRotation;
+    NewComponent->RelativeScale3D = RelativeScale3D;
+    return NewComponent;
 }
 
 

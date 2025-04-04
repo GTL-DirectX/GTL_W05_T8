@@ -169,6 +169,12 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{B65F6DDE-4DF9-4171-AE49-4BDBB4B9A13B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Source\Runtime\Engine\Classes\World">
+      <UniqueIdentifier>{4aa1eb12-64e9-49b6-a04c-1dc3e973da12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source\Runtime\Core\Stat">
+      <UniqueIdentifier>{8c00eefa-4baf-41d5-8c37-a7c79f7c1ce0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Source\Editor\LevelEditor\SLevelEditor.cpp">
@@ -426,9 +432,6 @@
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\PrimitiveComponent.h">
       <Filter>Engine\Source\Runtime\Engine\Classes\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\Quad.h">
-      <Filter>Engine\Source\Runtime\Engine\Classes\Components</Filter>
-    </ClInclude>
     <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\QuadTexture.cpp">
       <Filter>Engine\Source\Runtime\Engine\Classes\Components</Filter>
     </ClCompile>
@@ -672,13 +675,27 @@
     <ClInclude Include="Font\RawFonts.h">
       <Filter>Font</Filter>
     </ClInclude>
-    <ClCompile Include="Engine\Source\Runtime\Core\Math\Color.cpp" />
-    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Engine\Engine.cpp" />
-    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Engine\EditorEngine.cpp" />
-    <ClCompile Include="Engine\Source\Runtime\Core\Stats\Stats.cpp" />
-    <ClCompile Include="Engine\Source\Runtime\Windows\WindowsPlatformTime.cpp" />
-    <ClCompile Include="Engine\Source\Runtime\Engine\World\World.cpp" />
-    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Level.cpp" />
+    <ClCompile Include="Engine\Source\Runtime\Core\Math\Color.cpp">
+      <Filter>Engine\Source\Runtime\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Engine\Engine.cpp">
+      <Filter>Engine\Source\Runtime\Engine\Classes\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Engine\EditorEngine.cpp">
+      <Filter>Engine\Source\Runtime\Engine\Classes\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Level.cpp">
+      <Filter>Engine\Source\Runtime\Engine\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Source\Runtime\Engine\World\World.cpp">
+      <Filter>Engine\Source\Runtime\Engine\Classes\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Source\Runtime\Core\Stats\Stats.cpp">
+      <Filter>Engine\Source\Runtime\Core\Stat</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Source\Runtime\Windows\WindowsPlatformTime.cpp">
+      <Filter>Engine\Source\Runtime\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\PixelTextureShader.hlsl">
@@ -703,17 +720,38 @@
   <ItemGroup>
     <ClInclude Include="Engine\Source\Runtime\Engine\World\WorldContext.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\World\WorldType.h" />
-    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Engine\Engine.h" />
-    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Engine\EditorEngine.h" />
-    <ClInclude Include="Engine\Source\Runtime\Core\Math\MathSSE.h" />
-    <ClInclude Include="Engine\Source\Runtime\Core\Stats\Stats.h" />
-    <ClInclude Include="Engine\Source\Runtime\Windows\WindowsPlatformTime.h" />
-    <ClInclude Include="Engine\Source\Runtime\Engine\World\WorldContext.h" />
-    <ClInclude Include="Engine\Source\Runtime\Engine\World\WorldType.h" />
-    <ClInclude Include="Engine\Source\Runtime\Engine\World\World.h" />
-    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Level.h" />
+    <ClInclude Include="Engine\Source\Runtime\Core\Math\Color.h">
+      <Filter>Engine\Source\Runtime\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Engine\Engine.h">
+      <Filter>Engine\Source\Runtime\Engine\Classes\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Engine\EditorEngine.h">
+      <Filter>Engine\Source\Runtime\Engine\Classes\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Source\Runtime\Core\Math\MathSSE.h">
+      <Filter>Engine\Source\Runtime\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Level.h">
+      <Filter>Engine\Source\Runtime\Engine\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Source\Runtime\Engine\World\WorldType.h">
+      <Filter>Engine\Source\Runtime\Engine\Classes\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Source\Runtime\Engine\World\WorldContext.h">
+      <Filter>Engine\Source\Runtime\Engine\Classes\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Source\Runtime\Engine\World\World.h">
+      <Filter>Engine\Source\Runtime\Engine\Classes\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Source\Runtime\Core\Stats\Stats.h">
+      <Filter>Engine\Source\Runtime\Core\Stat</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Source\Runtime\Windows\WindowsPlatformTime.h">
+      <Filter>Engine\Source\Runtime\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Source\Runtime\Core\Math\Color.h" />
+    <Natvis Include="EngineSIU.natvis" />
   </ItemGroup>
 </Project>

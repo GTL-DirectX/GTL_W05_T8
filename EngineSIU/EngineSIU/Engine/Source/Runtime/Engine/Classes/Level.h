@@ -14,5 +14,7 @@ public:
     TArray<AActor*> Actors;
 
     UWorld* OwningWorld;
+
+    virtual UObject* Duplicate() override;
 };
 

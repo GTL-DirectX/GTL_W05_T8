@@ -1,5 +1,15 @@
 #include "MeshComponent.h"
+#include "UObject/Casts.h"
 
+UObject* UMeshComponent::Duplicate()
+{
+    UMeshComponent* NewComponent = Cast<UMeshComponent>(Super::Duplicate());
+    if (!NewComponent)
+        return nullptr;
+    // Copy the override materials
+    NewComponent->OverrideMaterials = OverrideMaterials;
+    return NewComponent;
+}
 
 UMaterial* UMeshComponent::GetMaterial(uint32 ElementIndex) const
 {

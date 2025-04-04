@@ -11,6 +11,7 @@ public:
 
     virtual void InitializeComponent() override;
     virtual void TickComponent(float DeltaTime) override;
+    virtual UObject* Duplicate() override;
     virtual int CheckRayIntersection(FVector& rayOrigin, FVector& rayDirection, float& pfNearHitDistance) override;
     bool IntersectRayTriangle(
         const FVector& rayOrigin, const FVector& rayDirection,
@@ -18,17 +19,7 @@ public:
     ) const;
     FBoundingBox AABB;
 
-private:
-    FString m_Type;
-
 public:
-    FString GetType() { return m_Type; }
-
-    void SetType(const FString& _Type)
-    {
-        m_Type = _Type;
-        //staticMesh = FEngineLoop::resourceMgr.GetMesh(m_Type);
-    }
     FBoundingBox GetBoundingBox() const { return AABB; }
 };
 

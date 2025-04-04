@@ -6,6 +6,7 @@
 #include "Classes/Components/StaticMeshComponent.h"
 #include "Components/SkySphereComponent.h"
 #include "Engine/FLoaderOBJ.h"
+#include "Level.h"
 
 void UWorld::Initialize()
 {
@@ -49,6 +50,19 @@ void UWorld::ReleaseBaseObject()
     }
 }
 
+UObject* UWorld::Duplicate()
+{
+    UWorld* NewWorld = Cast<UWorld>(Super::Duplicate());
+    if (!NewWorld)
+        return nullptr;
+    NewWorld->ActiveLevel = Cast<ULevel>(ActiveLevel->Duplicate());
+    if (NewWorld->ActiveLevel)
+    {
+        NewWorld->ActiveLevel->OwningWorld = NewWorld;
+    }
+    return NewWorld;
+}
+
 void UWorld::Tick(float DeltaTime)
 {
     EditorPlayer->Tick(DeltaTime);
@@ -70,7 +84,6 @@ void UWorld::Tick(float DeltaTime)
 
 void UWorld::BeginPlay()
 {
-    /*
     for (AActor* Actor : ActorsArray)
     {
         if (Actor->GetWorld() == this)
@@ -78,7 +91,7 @@ void UWorld::BeginPlay()
             Actor->BeginPlay();
         }
     }
-    */
+    
 }
 
 void UWorld::Release()

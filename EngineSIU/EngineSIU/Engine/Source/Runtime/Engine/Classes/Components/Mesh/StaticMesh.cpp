@@ -1,6 +1,7 @@
 #include "StaticMesh.h"
 #include "Engine/FLoaderOBJ.h"
 #include "UObject/ObjectFactory.h"
+#include "UObject/Casts.h"
 
 UStaticMesh::UStaticMesh()
 {
@@ -20,6 +21,17 @@ UStaticMesh::~UStaticMesh()
         staticMeshRenderData->IndexBuffer->Release();
         staticMeshRenderData->IndexBuffer = nullptr;
     }
+}
+
+UObject* UStaticMesh::Duplicate()
+{
+    UStaticMesh* NewMesh = Cast<UStaticMesh>(Super::Duplicate());
+    if (!NewMesh)
+        return nullptr;
+    NewMesh->staticMeshRenderData = staticMeshRenderData;
+    NewMesh->materials = materials;
+    return NewMesh;
+    
 }
 
 uint32 UStaticMesh::GetMaterialIndex(FName MaterialSlotName) const

@@ -9,6 +9,8 @@ class UStaticMeshComponent : public UMeshComponent
 public:
     UStaticMeshComponent() = default;
 
+    virtual UObject* Duplicate() override;
+
     PROPERTY(int, selectedSubMeshIndex);
 
     virtual uint32 GetNumMaterials() const override;
@@ -20,12 +22,7 @@ public:
     virtual int CheckRayIntersection(FVector& rayOrigin, FVector& rayDirection, float& pfNearHitDistance) override;
     
     UStaticMesh* GetStaticMesh() const { return staticMesh; }
-    void SetStaticMesh(UStaticMesh* value)
-    { 
-        staticMesh = value;
-        OverrideMaterials.SetNum(value->GetMaterials().Num());
-        AABB = FBoundingBox(staticMesh->GetRenderData()->BoundingBoxMin, staticMesh->GetRenderData()->BoundingBoxMax);
-    }
+    void SetStaticMesh(UStaticMesh* value);
 
 protected:
     UStaticMesh* staticMesh = nullptr;

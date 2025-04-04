@@ -1,6 +1,7 @@
 #include "Actor.h"
 
 #include "World/World.h"
+#include "Components/SceneComponent.h"
 
 void AActor::BeginPlay()
 {
@@ -27,6 +28,50 @@ void AActor::Destroyed()
 {
     // Actor가 제거되었을 때 호출하는 EndPlay
     EndPlay(EEndPlayReason::Destroyed);
+}
+
+UObject* AActor::Duplicate()
+{
+    AActor* NewActor = Cast<AActor>(Super::Duplicate());
+    if (!NewActor)
+        return nullptr;
+
+   
+    // Component 복제. 
+    // 기존 Component와의 계층 구조 유지를 위해 Map으로 저장 후 계층구조 유지.
+    TMap<UActorComponent*, UActorComponent*> ComponentMap;
+
+    for (UActorComponent* Component : OwnedComponents)
+    {
+        UActorComponent* NewComponent = Cast<UActorComponent>(Component->Duplicate());
+        if (NewComponent)
+        {
+            ComponentMap.Add(Component, NewComponent);
+            NewComponent->OwnerPrivate = NewActor;
+            NewActor->OwnedComponents.Add(NewComponent);
+        }
+    }
+
+    for (auto& Pair : ComponentMap)
+    {
+        USceneComponent* OldComponent = Cast<USceneComponent>(Pair.Key);
+        USceneComponent* NewComponent = Cast<USceneComponent>(Pair.Value);
+
+        if (!OldComponent || !NewComponent)
+            continue;
+
+        USceneComponent* OriginalParent = OldComponent->GetAttachParent();
+        if (OriginalParent)
+        {
+            USceneComponent* NewParent = Cast<USceneComponent>(ComponentMap[OriginalParent]);
+            if (NewParent)
+            {
+                NewComponent->SetupAttachment(NewParent);
+            }
+        }
+    }
+
+    return NewActor;
 }
 
 void AActor::EndPlay(const EEndPlayReason::Type EndPlayReason)

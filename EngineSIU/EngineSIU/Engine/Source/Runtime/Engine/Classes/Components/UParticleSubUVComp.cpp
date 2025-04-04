@@ -4,7 +4,6 @@
 
 UParticleSubUVComp::UParticleSubUVComp()
 {
-    SetType(StaticClass()->GetName());
     bIsLoop = true;
 }
 

@@ -2,7 +2,17 @@
 
 #include "Launch/EngineLoop.h"
 #include "UObject/ObjectFactory.h"
+#include "UObject/Casts.h"
 
+
+UObject* UStaticMeshComponent::Duplicate()
+{
+    UStaticMeshComponent* NewComponent = Cast<UStaticMeshComponent>(Super::Duplicate());
+    if (!NewComponent)
+        return nullptr;
+    NewComponent->staticMesh = staticMesh;
+    return NewComponent;
+}
 
 uint32 UStaticMeshComponent::GetNumMaterials() const
 {
@@ -108,4 +118,10 @@ int UStaticMeshComponent::CheckRayIntersection(FVector& rayOrigin, FVector& rayD
 
     }
     return nIntersections;
+}
+
+void UStaticMeshComponent::SetStaticMesh(UStaticMesh* value)
+{
+    staticMesh = value;
+    AABB = FBoundingBox(staticMesh->GetRenderData()->BoundingBoxMin, staticMesh->GetRenderData()->BoundingBoxMax);
 }

@@ -1,5 +1,7 @@
 #include "PrimitiveComponent.h"
 
+#include "UObject/Casts.h"
+
 UPrimitiveComponent::UPrimitiveComponent()
 {
 }
@@ -16,6 +18,15 @@ void UPrimitiveComponent::InitializeComponent()
 void UPrimitiveComponent::TickComponent(float DeltaTime)
 {
 	Super::TickComponent(DeltaTime);
+}
+
+UObject* UPrimitiveComponent::Duplicate()
+{
+    UPrimitiveComponent* NewComponent = Cast<UPrimitiveComponent>(Super::Duplicate());
+    if (!NewComponent)
+        return nullptr;
+    NewComponent->AABB = AABB;
+    return NewComponent;
 }
 
 int UPrimitiveComponent::CheckRayIntersection(FVector& rayOrigin, FVector& rayDirection, float& pfNearHitDistance)

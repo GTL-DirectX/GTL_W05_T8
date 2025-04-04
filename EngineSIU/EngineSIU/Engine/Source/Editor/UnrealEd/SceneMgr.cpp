@@ -14,6 +14,7 @@
 
 using json = nlohmann::json;
 
+[[deprecated]]
 SceneData FSceneMgr::ParseSceneData(const FString& jsonStr)
 {
     SceneData sceneData;
@@ -76,7 +77,7 @@ SceneData FSceneMgr::ParseSceneData(const FString& jsonStr)
             if (value.contains("Type")) {
                 UPrimitiveComponent* primitiveComp = Cast<UPrimitiveComponent>(sceneComp);
                 if (primitiveComp) {
-                    primitiveComp->SetType(value["Type"].get<std::string>());
+                    //primitiveComp->SetType(value["Type"].get<std::string>());
                 }
                 else {
                     std::string name = value["Type"].get<std::string>();

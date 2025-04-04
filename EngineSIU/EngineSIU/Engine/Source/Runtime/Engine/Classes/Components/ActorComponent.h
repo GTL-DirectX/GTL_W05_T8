@@ -30,6 +30,8 @@ public:
     /** Component가 제거되었을 때 호출됩니다. */
     virtual void OnComponentDestroyed();
 
+    virtual UObject* Duplicate() override;
+
     /**
      * Ends gameplay for this component.
      * Called from AActor::EndPlay only

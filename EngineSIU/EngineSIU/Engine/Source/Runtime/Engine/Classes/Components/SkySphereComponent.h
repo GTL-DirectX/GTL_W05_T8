@@ -10,6 +10,8 @@ public:
     USkySphereComponent();
 
     virtual void TickComponent(float DeltaTime) override;
+    virtual UObject* Duplicate() override;
+
     float UOffset = 0;
     float VOffset = 0;
 };

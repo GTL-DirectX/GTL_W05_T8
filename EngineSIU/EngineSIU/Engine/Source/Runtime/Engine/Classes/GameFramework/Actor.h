@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Components/SceneComponent.h"
 #include "Container/Set.h"
 #include "Engine/EngineTypes.h"
@@ -25,6 +25,8 @@ public:
 
     /** Actor가 제거될 때 호출됩니다. */
     virtual void Destroyed();
+
+    virtual UObject* Duplicate() override;
 
     /**
      * 액터가 게임 플레이를 종료할 때 호출되는 함수입니다.

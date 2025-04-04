@@ -30,6 +30,17 @@ void UActorComponent::OnComponentDestroyed()
 {
 }
 
+UObject* UActorComponent::Duplicate()
+{
+    UActorComponent* NewComponent = Cast<UActorComponent>(Super::Duplicate());
+    if (!NewComponent)
+        return nullptr;
+
+    NewComponent->InitializeComponent();
+
+    return NewComponent;
+}
+
 void UActorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
     assert(bHasBegunPlay);

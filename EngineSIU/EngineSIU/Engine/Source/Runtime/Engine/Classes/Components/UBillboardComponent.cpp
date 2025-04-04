@@ -11,7 +11,6 @@
 
 UBillboardComponent::UBillboardComponent()
 {
-    SetType(StaticClass()->GetName());
 }
 
 UBillboardComponent::~UBillboardComponent()

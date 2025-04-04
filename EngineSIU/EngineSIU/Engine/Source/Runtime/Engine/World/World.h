@@ -12,6 +12,7 @@ class UCameraComponent;
 class AEditorPlayer;
 class USceneComponent;
 class ATransformGizmo;
+class ULevel;
 
 
 class UWorld : public UObject
@@ -20,7 +21,7 @@ class UWorld : public UObject
 
 public:
     UWorld() = default;
-
+    virtual UObject* Duplicate() override;
 
     void Tick(float DeltaTime);
     void BeginPlay();
@@ -47,6 +48,8 @@ private:
 
     /** World에서 관리되는 모든 Actor의 목록 */
     TSet<AActor*> ActorsArray;
+
+    ULevel* ActiveLevel;
 
     /** Actor가 Spawn되었고, 아직 BeginPlay가 호출되지 않은 Actor들 */
     TArray<AActor*> PendingBeginPlayActors;

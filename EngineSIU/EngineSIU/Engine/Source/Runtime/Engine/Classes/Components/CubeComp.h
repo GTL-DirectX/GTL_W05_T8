@@ -10,4 +10,5 @@ public:
 
     virtual void InitializeComponent() override;
     virtual void TickComponent(float DeltaTime) override;
+    virtual UObject* Duplicate() override;
 };

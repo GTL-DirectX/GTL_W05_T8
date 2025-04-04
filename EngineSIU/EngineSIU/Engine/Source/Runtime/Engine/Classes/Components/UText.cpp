@@ -7,7 +7,6 @@
 
 UText::UText()
 {
-    SetType(StaticClass()->GetName());
 }
 
 UText::~UText()

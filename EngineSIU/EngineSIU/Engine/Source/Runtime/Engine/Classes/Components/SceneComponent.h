@@ -12,6 +12,7 @@ public:
 
     virtual void InitializeComponent() override;
     virtual void TickComponent(float DeltaTime) override;
+    virtual UObject* Duplicate() override;
     virtual int CheckRayIntersection(FVector& rayOrigin, FVector& rayDirection, float& pfNearHitDistance);
     virtual FVector GetForwardVector();
     virtual FVector GetRightVector();
@@ -19,6 +20,8 @@ public:
     void AddLocation(FVector _added);
     void AddRotation(FVector _added);
     void AddScale(FVector _added);
+
+    FORCEINLINE USceneComponent* GetAttachParent() const { return AttachParent; }
 
 protected:
     FVector RelativeLocation;
