@@ -86,7 +86,7 @@ public:
     FVector4 EncodeUUID() const {
         FVector4 result;
 
-        result.X = UUID % 0xFF;
+        result.X = UUID & 0xFF;
         result.Y = UUID >> 8 & 0xFF;
         result.Z = UUID >> 16 & 0xFF;
         result.W = UUID >> 24 & 0xFF;
