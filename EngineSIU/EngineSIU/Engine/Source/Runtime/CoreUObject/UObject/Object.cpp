@@ -26,13 +26,20 @@ UObject* UObject::Duplicate()
     const uint32 Id = UEngineStatics::GenUUID();
     const FString Name = ClassInfo->GetName() + "_" + std::to_string(Id);
 
+    /**
+     * TODO: 아래 코드는 다중상속인 경우에는 문제가 될 수 있음
+     * (Ex: class APawn : public AActor, public IInputSystem)
+     * 이러면 AActor에 대한 vtable과, IInputSystem에 대한 vtable이 나뉨
+     */
     void* RawMemory = FPlatformMemory::Malloc<EAT_Object>(ClassInfo->GetClassSize());
-    std::memcpy(RawMemory, this, ClassInfo->GetClassSize());
-    std::memset(static_cast<char*>(RawMemory) + 8, 0, ClassInfo->GetClassSize() - 8); // vtable 제외 나머지 메모리 초기화
-    UObject* NewObject = static_cast<UObject*>(RawMemory);
-
-    if (!NewObject)
+    if (!RawMemory)
+    {
         return nullptr;
+    }
+
+    std::memcpy(RawMemory, this, ClassInfo->GetClassSize());
+    std::memset(static_cast<char*>(RawMemory) + sizeof(void*), 0, ClassInfo->GetClassSize() - sizeof(void*)); // vtable 제외 나머지 메모리 초기화
+    UObject* NewObject = static_cast<UObject*>(RawMemory);
 
     NewObject->ClassPrivate = ClassInfo;
     NewObject->NamePrivate = Name;
