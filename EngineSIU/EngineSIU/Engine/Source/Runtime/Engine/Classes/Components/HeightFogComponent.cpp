@@ -4,6 +4,8 @@ UHeightFogComponent::UHeightFogComponent(float Density, float HeightFalloff, flo
     :FogDensity(Density), FogHeightFalloff(HeightFalloff), StartDistance(StartDist), FogCutoffDistance(CutoffDist), FogMaxOpacity(MaxOpacity)
 {
     FogInscatteringColor = FLinearColor::White;
+    LightDirection = FVector(1, -1, -1).GetSafeNormal();
+    InScatteringIntensity = 1;
 }
 
 void UHeightFogComponent::SetFogDensity(float value)
@@ -34,4 +36,14 @@ void UHeightFogComponent::SetFogMaxOpacity(float value)
 void UHeightFogComponent::SetFogColor(FLinearColor color)
 {
     FogInscatteringColor = color;
+}
+
+void UHeightFogComponent::SetLightDirection(FVector direction)
+{
+    LightDirection = direction;
+}
+
+void UHeightFogComponent::SetInScatteringIntensity(float intensity)
+{
+    InScatteringIntensity = intensity;
 }

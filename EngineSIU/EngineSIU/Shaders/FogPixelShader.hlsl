@@ -15,6 +15,8 @@ cbuffer ConstantBuffer : register(b1)
     float FogCutoffDistance;
     float FogMaxOpacity;
     float3 FogPosition;
+    float LightIntensity;
+    float3 LightDirection;
     float padding;
 };
 
@@ -64,6 +66,14 @@ float4 mainPS(PS_INPUT input) : SV_Target
     if (distance < StartDistance)
         FogFactor = 0;
     
-    float4 FinalColor = float4(FogColor.rgb * FogFactor, FogFactor);
+    float3 ViewDir = normalize(worldPos - CameraPos);
+    float3 LightDir = normalize(LightDirection);
+    
+    float Phase = 0.5 + 0.5 * dot(LightDir, ViewDir);
+    float3 InScatter = FogColor.rgb * Phase * LightIntensity;
+    
+    float3 FinalFogColor = InScatter;
+    
+    float4 FinalColor = float4(FinalFogColor * FogFactor, FogFactor);
     return FinalColor;
 }

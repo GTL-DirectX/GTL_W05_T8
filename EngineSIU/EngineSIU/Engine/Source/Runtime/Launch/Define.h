@@ -413,5 +413,7 @@ struct FFogConstants
     float FogCutoffDistance;
     float FogMaxOpacity;
     FVector FogPosition;
+    float LightIntensity;
+    FVector LightDirection;
     float padding;
 };

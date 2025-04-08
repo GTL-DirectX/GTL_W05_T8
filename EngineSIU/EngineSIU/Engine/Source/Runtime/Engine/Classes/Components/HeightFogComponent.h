@@ -11,7 +11,10 @@ private:
     float StartDistance;
     float FogCutoffDistance;
     float FogMaxOpacity;
+    //InScattering 관련 변수
     FLinearColor FogInscatteringColor;
+    FVector LightDirection;
+    float InScatteringIntensity;
 
 public:
     UHeightFogComponent(float Density = 0.05f, float HeightFalloff = 0.05f, float StartDist = 0.1f, float CutoffDist = 0.0f, float MaxOpacity = 1.0f);
@@ -22,6 +25,8 @@ public:
     float GetFogCutoffDistance() { return FogCutoffDistance; }
     float GetFogMaxOpacity() { return FogMaxOpacity; }
     FLinearColor GetFogColor() { return FogInscatteringColor; }
+    FVector GetLightDirection() { return LightDirection; }
+    float GetInScatteringIntensity() { return InScatteringIntensity; }
     
     void SetFogDensity(float value);
     void SetFogHeightFalloff(float value);
@@ -29,4 +34,6 @@ public:
     void SetFogCutoffDistance(float value);
     void SetFogMaxOpacity(float value);
     void SetFogColor(FLinearColor color);
+    void SetLightDirection(FVector direction);
+    void SetInScatteringIntensity(float intensity);
 };
