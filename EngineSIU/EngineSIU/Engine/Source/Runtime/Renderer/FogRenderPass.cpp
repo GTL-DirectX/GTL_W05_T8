@@ -177,19 +177,18 @@ void FFogRenderPass::PrepareRender()
 {
     for (const auto iter : TObjectRange<UHeightFogComponent>())
     {
-        if (iter->GetOwner()->GetWorld() == GEngine->ActiveWorld)
+        if (iter->GetWorld() == GEngine->ActiveWorld)
         {
             FogComponents.Add(iter);
         }
     }
     if (FogComponents.Num() > 0)
-        bRender = true;
+        Graphics->PrepareTexture();
 }
 
 void FFogRenderPass::ClearRenderArr()
 {
     FogComponents.Empty();
-    bRender = false;
 }
 
 void FFogRenderPass::PrepareRenderState(ID3D11ShaderResourceView* DepthSRV)
@@ -212,6 +211,9 @@ void FFogRenderPass::PrepareRenderState(ID3D11ShaderResourceView* DepthSRV)
 
 void FFogRenderPass::RenderFog(const std::shared_ptr<FEditorViewportClient>& ActiveViewport, ID3D11ShaderResourceView* DepthSRV)
 {
+    if (ActiveViewport->GetViewMode() == EViewModeIndex::VMI_Wireframe || FogComponents.Num() <= 0)
+        return;
+
     D3D11_VIEWPORT vp = ActiveViewport->GetD3DViewport();
     CheckResize();
 
@@ -316,11 +318,9 @@ void FFogRenderPass::UpdateFogConstant(const std::shared_ptr<FEditorViewportClie
         Constants.StartDistance = Fog->GetStartDistance();
         Constants.FogCutoffDistance = Fog->GetFogCutoffDistance();
         Constants.FogMaxOpacity = Fog->GetFogMaxOpacity();
-        if (ActiveViewport->IsOrtho()) 
-        {
-            Constants.FogMaxOpacity = Fog->GetFogMaxOpacity() * 0.5f;
-        }
         Constants.FogPosition = Fog->GetWorldLocation();
+        Constants.CameraNear = ActiveViewport->nearPlane;
+        Constants.CameraFar = ActiveViewport->farPlane;
     }
     //상수버퍼 업데이트
     BufferManager->UpdateConstantBuffer(TEXT("FFogConstants"), Constants);

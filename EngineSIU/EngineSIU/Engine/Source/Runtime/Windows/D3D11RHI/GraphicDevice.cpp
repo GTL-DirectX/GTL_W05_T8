@@ -369,22 +369,6 @@ void FGraphicsDevice::Prepare(D3D11_VIEWPORT* viewport) const
     DeviceContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);            // 블렌뎅 상태 설정, 기본블렌딩 상태임
 }
 
-void FGraphicsDevice::PrepareUI() const
-{
-    DeviceContext->OMSetRenderTargets(1, &FrameBufferRTV, DepthStencilView);
-}
-
-void FGraphicsDevice::PrepareFog() const
-{
-    ID3D11RenderTargetView* nullRTVs[2] = { nullptr,nullptr };
-    DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // 정정 연결 방식 설정
-
-    DeviceContext->RSSetState(CurrentRasterizer); //레스터 라이저 상태 설정
-
-    DeviceContext->OMSetDepthStencilState(DepthStencilState, 0);
-    DeviceContext->OMSetRenderTargets(2, nullRTVs, nullptr);
-}
-
 void FGraphicsDevice::PrepareTexture() const
 {
     ID3D11RenderTargetView* tempRTVs[2] =

@@ -50,8 +50,6 @@ public:
 
     void CreateRTV();
 
-    bool ShouldRender() { return bRender; }
-
 private:
     ID3D11SamplerState* Sampler = nullptr;
 
@@ -80,7 +78,6 @@ private:
 
     TArray<UHeightFogComponent*> FogComponents;
 
-    bool bRender = false;
     float screenWidth = 0;
     float screenHeight = 0;
 };
