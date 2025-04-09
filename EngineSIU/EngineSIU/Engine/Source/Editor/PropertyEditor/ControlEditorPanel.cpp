@@ -11,7 +11,7 @@
 #include "Components/SpotLightComponent.h"
 #include "Components/SphereComp.h"
 #include "Components/ParticleSubUVComponent.h"
-#include "Components/UTextComponent.h"
+#include "Components/TextComponent.h"
 #include "Components/ProjectileMovementComponent.h"
 
 #include "Engine/FLoaderOBJ.h"
@@ -263,14 +263,13 @@ void ControlEditorPanel::CreateModifyButton(ImVec2 ButtonSize, ImFont* IconFont)
         };
 
         static const Primitive primitives[] = {
-            { .label= "Cube",      .obj= OBJ_CUBE },
-            { .label= "Sphere",    .obj= OBJ_SPHERE },
-            { .label= "SpotLight", .obj= OBJ_SpotLight },
-            { .label= "PointLight", .obj= OBJ_PointLight },
-            { .label= "Particle",  .obj= OBJ_PARTICLE },
-            { .label= "Text",      .obj= OBJ_Text },
-            { .label= "Fireball",  .obj = OBJ_Fireball},
-            { .label= "Fog",       .obj= OBJ_Fog }
+            {.label = "Cube",      .obj = OBJ_CUBE },
+            {.label = "Sphere",    .obj = OBJ_SPHERE },
+            {.label = "PointLight", .obj = OBJ_PointLight },
+            {.label = "Particle",  .obj = OBJ_PARTICLE },
+            {.label = "Text",      .obj = OBJ_Text },
+            {.label = "Fireball",  .obj = OBJ_Fireball},
+            {.label = "Fog",       .obj = OBJ_Fog }
         };
 
         for (const auto& primitive : primitives)
@@ -287,39 +286,20 @@ void ControlEditorPanel::CreateModifyButton(ImVec2 ButtonSize, ImFont* IconFont)
                     SpawnedActor = World->SpawnActor<AActor>();
                     SpawnedActor->SetActorLabel(TEXT("OBJ_SPHERE"));
                     USphereComp* SphereComp = SpawnedActor->AddComponent<USphereComp>();
-                    FManagerOBJ::CreateStaticMesh("Assets/Sphere.obj");
-                    SphereComp->SetStaticMesh(FManagerOBJ::GetStaticMesh(L"Sphere.obj"));
+                    SphereComp->SetStaticMesh(FManagerOBJ::GetStaticMesh(L"Contents/Sphere.obj"));
                     break;
                 }
                 case OBJ_CUBE:
                 {
-                        // TODO: 다른 부분들 전부 Actor만 소환하도록 하고, Component 생성은 Actor가 자체적으로 하도록 변경.
+                    // TODO: 다른 부분들 전부 Actor만 소환하도록 하고, Component 생성은 Actor가 자체적으로 하도록 변경.
                     ACube* CubeActor = World->SpawnActor<ACube>();
                     CubeActor->SetActorLabel(TEXT("OBJ_CUBE"));
-                    break;
-                }
-                case OBJ_SpotLight:
-                {
-                    ALight* LightActor = World->SpawnActor<ALight>();
-                    LightActor->SetActorLabel(TEXT("OBJ_SpotLight"));
-
-                    UBillboardComponent* BillboardComponent = LightActor->AddComponent<UBillboardComponent>();
-                    BillboardComponent->SetTexture(L"Assets/Editor/Icon/SpotLight_64x.png");
-
-                    USpotLightComponent* SpotLightComp = LightActor->AddComponent<USpotLightComponent>();
-                    SpotLightComp->AttachToComponent(LightActor->GetRootComponent());
                     break;
                 }
                 case OBJ_PointLight:
                 {
                     ALight* LightActor = World->SpawnActor<ALight>();
                     LightActor->SetActorLabel(TEXT("OBJ_PointLight"));
-
-                    UBillboardComponent* BillboardComponent = LightActor->AddComponent<UBillboardComponent>();
-                    BillboardComponent->SetTexture(L"Assets/Editor/Icon/PointLight_64x.png");
-
-                    UPointLightComponent* PointLightComp = LightActor->AddComponent<UPointLightComponent>();
-                    PointLightComp->AttachToComponent(LightActor->GetRootComponent());
                     break;
                 }
                 case OBJ_PARTICLE:
@@ -331,6 +311,7 @@ void ControlEditorPanel::CreateModifyButton(ImVec2 ButtonSize, ImFont* IconFont)
                     ParticleComponent->SetRowColumnCount(6, 6);
                     ParticleComponent->SetRelativeScale3D(FVector(10.0f, 10.0f, 1.0f));
                     ParticleComponent->Activate();
+                    SpawnedActor->SetActorTickInEditor(true);
                     break;
                 }
                 case OBJ_Text:
@@ -341,6 +322,7 @@ void ControlEditorPanel::CreateModifyButton(ImVec2 ButtonSize, ImFont* IconFont)
                     TextComponent->SetTexture(L"Assets/Texture/font.png");
                     TextComponent->SetRowColumnCount(106, 106);
                     TextComponent->SetText(L"안녕하세요 Jungle 1");
+
                     break;
                 }
                 case OBJ_Fireball:
@@ -348,17 +330,6 @@ void ControlEditorPanel::CreateModifyButton(ImVec2 ButtonSize, ImFont* IconFont)
                     SpawnedActor = World->SpawnActor<AFireballActor>();
                     SpawnedActor->SetActorLabel(TEXT("OBJ_Fireball"));
 
-                    USphereComp* SphereComp = SpawnedActor->AddComponent<USphereComp>();
-                    
-                    FManagerOBJ::CreateStaticMesh("Assets/Sphere.obj");
-                    
-                    SphereComp->SetStaticMesh(FManagerOBJ::GetStaticMesh(L"Sphere.obj"));
-                    SphereComp->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
-                    
-                    UPointLightComponent* PointLightComp = SpawnedActor->AddComponent<UPointLightComponent>();
-                    UProjectileMovementComponent* ProjectileMovementComponent = SpawnedActor->AddComponent<UProjectileMovementComponent>();
-                    
-                    PointLightComp->AttachToComponent(SpawnedActor->GetRootComponent());
                     break;
                 }
                 case OBJ_Fog:
@@ -367,6 +338,7 @@ void ControlEditorPanel::CreateModifyButton(ImVec2 ButtonSize, ImFont* IconFont)
                     SpawnedActor->SetActorLabel(TEXT("OBJ_HeightFog"));
                     break;
                 }
+                case OBJ_SpotLight:
                 case OBJ_TRIANGLE:
                 case OBJ_CAMERA:
                 case OBJ_PLAYER:
@@ -455,7 +427,7 @@ void ControlEditorPanel::CreateFlagButton() const
         ImGui::OpenPopup("ShowControl");
     }
 
-    const char* items[] = { "AABB", "Primitive", "BillBoard", "UUID" };
+    const char* items[] = { "AABB", "Primitive", "BillBoard", "UUID", "Fog" };
     uint64 ActiveViewportFlags = ActiveViewport->GetShowFlag();
 
     if (ImGui::BeginPopup("ShowControl"))
@@ -465,7 +437,8 @@ void ControlEditorPanel::CreateFlagButton() const
             (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_AABB)) != 0,
             (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_Primitives)) != 0,
             (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_BillboardText)) != 0,
-            (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_UUIDText)) != 0
+            (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_UUIDText)) != 0,
+            (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_Fog)) != 0
         };  // 각 항목의 체크 상태 저장
 
         for (int i = 0; i < IM_ARRAYSIZE(items); i++)
@@ -488,7 +461,7 @@ void ControlEditorPanel::CreatePIEButton(ImVec2 ButtonSize, ImFont* IconFont) co
     float CenterX = (WindowSize.x - ButtonSize.x) / 2.5f;
 
     ImGui::SetCursorScreenPos(ImVec2(CenterX - 40.0f, 10.0f));
-    
+
     if (ImGui::Button("\ue9a8", ButtonSize)) // Play
     {
         UE_LOG(LogLevel::Display, TEXT("PIE Button Clicked"));
@@ -501,7 +474,7 @@ void ControlEditorPanel::CreatePIEButton(ImVec2 ButtonSize, ImFont* IconFont) co
         UE_LOG(LogLevel::Display, TEXT("Stop Button Clicked"));
         Engine->EndPIE();
     }
-    
+
 }
 
 // code is so dirty / Please refactor
@@ -570,6 +543,8 @@ uint64 ControlEditorPanel::ConvertSelectionToFlags(const bool selected[]) const
         flags |= static_cast<uint64>(EEngineShowFlags::SF_BillboardText);
     if (selected[3])
         flags |= static_cast<uint64>(EEngineShowFlags::SF_UUIDText);
+    if (selected[4])
+        flags |= static_cast<uint64>(EEngineShowFlags::SF_Fog);
     return flags;
 }
 
