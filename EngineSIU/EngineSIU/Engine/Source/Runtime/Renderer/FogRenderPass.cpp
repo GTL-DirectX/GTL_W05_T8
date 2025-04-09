@@ -19,6 +19,8 @@ struct Vertex
 FFogRenderPass::FFogRenderPass()
     : Graphics(nullptr)
     , ShaderManager(nullptr)
+    , FogVertexBuffer(nullptr)
+    , FogIndexBuffer(nullptr)
     , FogVertexShader(nullptr)
     , FogPixelShader(nullptr)
     , InputLayout(nullptr)
@@ -27,6 +29,8 @@ FFogRenderPass::FFogRenderPass()
 
 FFogRenderPass::~FFogRenderPass()
 {
+    if (FogVertexBuffer) { FogVertexBuffer->Release(); FogVertexBuffer = nullptr; }
+    if (FogIndexBuffer) { FogIndexBuffer->Release();  FogIndexBuffer = nullptr; }
     if (FogVertexShader) { FogVertexShader->Release(); FogVertexShader = nullptr; }
     if (FogPixelShader) { FogPixelShader->Release(); FogPixelShader = nullptr; }
     if (InputLayout) { InputLayout->Release(); InputLayout = nullptr; }
@@ -43,8 +47,47 @@ void FFogRenderPass::Initialize(FDXDBufferManager* InBufferManager, FGraphicsDev
     BufferManager = InBufferManager;
     ShaderManager = InShaderManager;
     CreateRTV();
+    CreateSpriteResources();
     CreateShader();
     CreateBlendState();
+}
+
+void FFogRenderPass::CreateSpriteResources()
+{
+    // 전체 화면 Quad 정점 데이터 (정규화 좌표 사용)
+    Vertex vertices[] =
+    {
+        { {-1.0f,  1.0f, 0.0f}, {0.0f, 0.0f} },
+        { { 1.0f,  1.0f, 0.0f}, {1.0f, 0.0f} },
+        { { 1.0f, -1.0f, 0.0f}, {1.0f, 1.0f} },
+        { {-1.0f, -1.0f, 0.0f}, {0.0f, 1.0f} },
+    };
+
+    // 인덱스 데이터 (두 삼각형으로 Quad 구성)
+    unsigned short indices[] =
+    {
+        0, 1, 2,
+        0, 2, 3
+    };
+
+    // 정점 버퍼 생성
+    D3D11_BUFFER_DESC vbDesc = {};
+    vbDesc.Usage = D3D11_USAGE_DEFAULT;
+    vbDesc.ByteWidth = sizeof(vertices);
+    vbDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    D3D11_SUBRESOURCE_DATA vbData = {};
+    vbData.pSysMem = vertices;
+    HRESULT hr = Graphics->Device->CreateBuffer(&vbDesc, &vbData, &FogVertexBuffer);
+
+
+    // 인덱스 버퍼 생성
+    D3D11_BUFFER_DESC ibDesc = {};
+    ibDesc.Usage = D3D11_USAGE_DEFAULT;
+    ibDesc.ByteWidth = sizeof(indices);
+    ibDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    D3D11_SUBRESOURCE_DATA ibData = {};
+    ibData.pSysMem = indices;
+    hr = Graphics->Device->CreateBuffer(&ibDesc, &ibData, &FogIndexBuffer);
 }
 
 void FFogRenderPass::CreateShader()
@@ -178,21 +221,15 @@ void FFogRenderPass::RenderFog(const std::shared_ptr<FEditorViewportClient>& Act
 
     PrepareRenderState(DepthSRV);
 
-    FVertexInfo VertexInfo;
-    FIndexInfo IndexInfo;
-
-    BufferManager->GetQuadBuffer(VertexInfo, IndexInfo);
-
-    UINT offset = 0;
-
     for (const auto& Fog : FogComponents)
     {
         if (Fog->GetFogDensity() > 0 && Fog->GetFogMaxOpacity() > 0)
         {
             UpdateFogConstant(ActiveViewport, Fog);
 
-            Graphics->DeviceContext->IASetVertexBuffers(0, 1, &VertexInfo.VertexBuffer, &VertexInfo.Stride, &offset);
-            Graphics->DeviceContext->IASetIndexBuffer(IndexInfo.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+            UINT stride = sizeof(Vertex), offset = 0;
+            Graphics->DeviceContext->IASetVertexBuffers(0, 1, &FogVertexBuffer, &stride, &offset);
+            Graphics->DeviceContext->IASetIndexBuffer(FogIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
             Graphics->DeviceContext->IASetInputLayout(InputLayout);
 
             Graphics->DeviceContext->DrawIndexed(6, 0, 0);
@@ -330,15 +367,9 @@ void FFogRenderPass::PrepareFinalRender()
 
 void FFogRenderPass::FinalRender()
 {
-    FVertexInfo VertexInfo;
-    FIndexInfo IndexInfo;
-
-    BufferManager->GetQuadBuffer(VertexInfo, IndexInfo);
-
-    UINT offset = 0;
-
-    Graphics->DeviceContext->IASetVertexBuffers(0, 1, &VertexInfo.VertexBuffer, &VertexInfo.Stride, &offset);
-    Graphics->DeviceContext->IASetIndexBuffer(IndexInfo.IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+    UINT stride = sizeof(Vertex), offset = 0;
+    Graphics->DeviceContext->IASetVertexBuffers(0, 1, &FogVertexBuffer, &stride, &offset);
+    Graphics->DeviceContext->IASetIndexBuffer(FogIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
     Graphics->DeviceContext->IASetInputLayout(InputLayout);
 
     Graphics->DeviceContext->DrawIndexed(6, 0, 0);
