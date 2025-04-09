@@ -267,7 +267,7 @@ void PropertyEditorPanel::Render()
             }
 
             float FogHeightFallOff = FogComponent->GetFogHeightFalloff();
-            if (ImGui::SliderFloat("Height Fall Off", &FogHeightFallOff, 0.01f, 1.0f))
+            if (ImGui::SliderFloat("Height Fall Off", &FogHeightFallOff, 0.001f, 0.3f))
             {
                 FogComponent->SetFogHeightFalloff(FogHeightFallOff);
             }

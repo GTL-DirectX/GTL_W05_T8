@@ -221,14 +221,17 @@ void FFogRenderPass::RenderFog(const std::shared_ptr<FEditorViewportClient>& Act
 
     for (const auto& Fog : FogComponents)
     {
-        UpdateFogConstant(ActiveViewport, Fog);
+        if (Fog->GetFogDensity() > 0 && Fog->GetFogMaxOpacity() > 0)
+        {
+            UpdateFogConstant(ActiveViewport, Fog);
 
-        UINT stride = sizeof(Vertex), offset = 0;
-        Graphics->DeviceContext->IASetVertexBuffers(0, 1, &FogVertexBuffer, &stride, &offset);
-        Graphics->DeviceContext->IASetIndexBuffer(FogIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-        Graphics->DeviceContext->IASetInputLayout(InputLayout);
+            UINT stride = sizeof(Vertex), offset = 0;
+            Graphics->DeviceContext->IASetVertexBuffers(0, 1, &FogVertexBuffer, &stride, &offset);
+            Graphics->DeviceContext->IASetIndexBuffer(FogIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+            Graphics->DeviceContext->IASetInputLayout(InputLayout);
 
-        Graphics->DeviceContext->DrawIndexed(6, 0, 0);
+            Graphics->DeviceContext->DrawIndexed(6, 0, 0);
+        }
     }
 
     PrepareFinalRender();
@@ -315,7 +318,7 @@ void FFogRenderPass::UpdateFogConstant(const std::shared_ptr<FEditorViewportClie
         Constants.FogMaxOpacity = Fog->GetFogMaxOpacity();
         if (ActiveViewport->IsOrtho()) 
         {
-            Constants.FogMaxOpacity = Fog->GetFogMaxOpacity() * 0.25f;
+            Constants.FogMaxOpacity = Fog->GetFogMaxOpacity() * 0.5f;
         }
         Constants.FogPosition = Fog->GetWorldLocation();
     }
