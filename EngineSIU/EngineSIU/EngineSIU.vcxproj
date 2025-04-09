@@ -171,12 +171,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Source\Runtime\CoreUObject\UObject\Property.cpp" />
+    <ClCompile Include="Engine\Source\Runtime\Core\Math\Quat.cpp" />
+    <ClCompile Include="Engine\Source\Runtime\Core\Math\Rotator.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Core\Serialization\Archive.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Core\Serialization\MemoryArchive.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Core\Math\Matrix.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Actors\Cube.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Actors\HeightFogActor.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\HeightFogComponent.cpp" />
+    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Engine\AssetManager.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Renderer\DepthBufferDebugPass.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Engine\EditorEngine.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Engine\Engine.cpp" />
@@ -245,11 +248,10 @@
     <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\SceneComponent.cpp" />
     <ClCompile Include="Engine\Source\Editor\UnrealEd\SceneMgr.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\SphereComp.cpp" />
-    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\UBillboardComponent.cpp" />
+    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\BillboardComponent.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\ParticleSubUVComponent.cpp" />
-    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\UTextComponent.cpp" />
+    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\TextComponent.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\UTextUUID.cpp" />
-    <ClCompile Include="Engine\Source\Runtime\Engine\Classes\Components\QuadTexture.cpp" />
     <ClCompile Include="Engine\Source\ThirdParty\tinyfiledialogs\tinyfiledialogs.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Renderer\StaticMeshRenderPass.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Renderer\GizmoRenderPass.cpp" />
@@ -265,12 +267,14 @@
   <ItemGroup>
     <ClInclude Include="Engine\Source\Runtime\CoreUObject\UObject\Property.h" />
     <ClInclude Include="Engine\Source\Runtime\Core\CoreMiscDefines.h" />
+    <ClInclude Include="Engine\Source\Runtime\Core\Math\Rotator.h" />
     <ClInclude Include="Engine\Source\Runtime\Core\Serialization\Archive.h" />
     <ClInclude Include="Engine\Source\Runtime\Core\Serialization\MemoryArchive.h" />
     <ClInclude Include="Engine\Source\Runtime\Core\Math\Matrix.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Actors\Cube.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Actors\HeightFogActor.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\HeightFogComponent.h" />
+    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Engine\AssetManager.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Engine\EditorEngine.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Engine\Engine.h" />
     <ClInclude Include="Engine\Source\Runtime\Renderer\DepthBufferDebugPass.h" />
@@ -358,7 +362,6 @@
     <ClInclude Include="Engine\Source\Editor\UnrealEd\PrimitiveDrawBatch.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\PrimitiveComponent.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\Quad.h" />
-    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\QuadTexture.h" />
     <ClInclude Include="Engine\Source\Runtime\InteractiveToolsFramework\BaseGizmos\GizmoRectangleComponent.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\SceneComponent.h" />
     <ClInclude Include="Engine\Source\Editor\UnrealEd\SceneMgr.h" />
@@ -383,13 +386,13 @@
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\MeshComponent.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\Mesh\StaticMesh.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\StaticMeshComponent.h" />
-    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\UBillboardComponent.h" />
+    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\BillboardComponent.h" />
     <ClCompile Include="Engine\Source\Runtime\CoreUObject\UObject\Class.cpp" />
     <ClInclude Include="Engine\Source\Runtime\CoreUObject\UObject\ObjectMacros.h" />
     <ClInclude Include="Engine\Source\Runtime\CoreUObject\UObject\ObjectTypes.h" />
     <ClInclude Include="Engine\Source\Runtime\CoreUObject\UObject\Class.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\ParticleSubUVComponent.h" />
-    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\UTextComponent.h" />
+    <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\TextComponent.h" />
     <ClInclude Include="Engine\Source\Runtime\Engine\Classes\Components\UTextUUID.h" />
     <ClInclude Include="Engine\Source\Runtime\Renderer\StaticMeshRenderPass.h" />
     <ClInclude Include="Engine\Source\Runtime\Renderer\GizmoRenderPass.h" />

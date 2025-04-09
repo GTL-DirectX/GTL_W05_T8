@@ -54,6 +54,8 @@ public:
     template <typename T>
         requires std::derived_from<T, UActorComponent>
     T* AddComponent();
+    UActorComponent* AddComponent(UClass* InClass);
+
 
     /** Actor가 가지고 있는 Component를 제거합니다. */
     void RemoveOwnedComponent(UActorComponent* Component);
@@ -76,16 +78,16 @@ public:
     void SetOwner(AActor* NewOwner) { Owner = NewOwner; }
 
 public:
-    FVector GetActorLocation() const { return RootComponent ? RootComponent->GetWorldLocation() : FVector::ZeroVector; }
-    FVector GetActorRotation() const { return RootComponent ? RootComponent->GetWorldRotation() : FVector::ZeroVector; }
-    FVector GetActorScale() const { return RootComponent ? RootComponent->GetWorldScale() : FVector::ZeroVector; }
+    FVector GetActorLocation() const;
+    FRotator GetActorRotation() const;
+    FVector GetActorScale() const;
 
     FVector GetActorForwardVector() const { return RootComponent ? RootComponent->GetForwardVector() : FVector::ForwardVector; }
     FVector GetActorRightVector() const { return RootComponent ? RootComponent->GetRightVector() : FVector::RightVector; }
     FVector GetActorUpVector() const { return RootComponent ? RootComponent->GetUpVector() : FVector::UpVector; }
 
     bool SetActorLocation(const FVector& NewLocation);
-    bool SetActorRotation(const FVector& NewRotation);
+    bool SetActorRotation(const FRotator& NewRotation);
     bool SetActorScale(const FVector& NewScale);
 
 protected:
@@ -130,32 +132,11 @@ private:
 
 };
 
-
-template <typename T> requires std::derived_from<T, UActorComponent>
+template <typename T>
+    requires std::derived_from<T, UActorComponent>
 T* AActor::AddComponent()
 {
-    T* Component = FObjectFactory::ConstructObject<T>(this);
-    OwnedComponents.Add(Component);
-    Component->OwnerPrivate = this;
-
-    // 만약 SceneComponent를 상속 받았다면
-    if (USceneComponent* NewSceneComp = Cast<USceneComponent>(Component))
-    {
-        if (RootComponent == nullptr)
-        {
-            RootComponent = NewSceneComp;
-        }
-        // TODO: 나중에 RegisterComponent() 생기면 주석 해제
-        // else
-        // {
-        //     NewSceneComp->SetupAttachment(RootComponent);
-        // }
-    }
-
-    // TODO: RegisterComponent() 생기면 제거
-    Component->InitializeComponent();
-
-    return Component;
+    return Cast<T>(AddComponent(T::StaticClass()));
 }
 
 template <typename T> requires std::derived_from<T, UActorComponent>

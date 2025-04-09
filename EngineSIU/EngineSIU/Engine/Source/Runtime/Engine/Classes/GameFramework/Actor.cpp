@@ -7,7 +7,7 @@ UObject* AActor::Duplicate(UObject* InOuter)
     ThisClass* NewActor = Cast<ThisClass>(Super::Duplicate(InOuter));
 
     NewActor->Owner = Owner;
-
+    NewActor->bTickInEditor = bTickInEditor;
     // 기본적으로 있던 컴포넌트 제거
     TSet CopiedComponents = NewActor->OwnedComponents;
     for (UActorComponent* Components : CopiedComponents)
@@ -117,6 +117,36 @@ bool AActor::Destroy()
     return IsActorBeingDestroyed();
 }
 
+UActorComponent* AActor::AddComponent(UClass* InClass)
+{
+    if (InClass->IsChildOf<UActorComponent>())
+    {
+        UActorComponent* Component = static_cast<UActorComponent*>(FObjectFactory::ConstructObject(InClass, this));
+        OwnedComponents.Add(Component);
+        Component->OwnerPrivate = this;
+
+        // 만약 SceneComponent를 상속 받았다면
+        if (USceneComponent* NewSceneComp = Cast<USceneComponent>(Component))
+        {
+            if (RootComponent == nullptr)
+            {
+                RootComponent = NewSceneComp;
+            }
+            // TODO: 나중에 RegisterComponent() 생기면 주석 해제
+            // else
+            // {
+            //     NewSceneComp->SetupAttachment(RootComponent);
+            // }
+        }
+
+        // TODO: RegisterComponent() 생기면 제거
+        Component->InitializeComponent();
+
+        return Component;
+    }
+    return nullptr;
+}
+
 void AActor::RemoveOwnedComponent(UActorComponent* Component)
 {
     OwnedComponents.Remove(Component);
@@ -170,6 +200,21 @@ bool AActor::SetRootComponent(USceneComponent* NewRootComponent)
     return false;
 }
 
+FVector AActor::GetActorLocation() const
+{
+    return RootComponent ? RootComponent->GetRelativeLocation() : FVector(FVector::ZeroVector); 
+}
+
+FRotator AActor::GetActorRotation() const
+{
+    return RootComponent ? RootComponent->GetRelativeRotation() : FRotator(FVector::ZeroVector);
+}
+
+FVector AActor::GetActorScale() const
+{
+    return RootComponent ? RootComponent->GetRelativeScale3D() : FVector(FVector::OneVector); 
+}
+
 bool AActor::SetActorLocation(const FVector& NewLocation)
 {
     if (RootComponent)
@@ -180,7 +225,7 @@ bool AActor::SetActorLocation(const FVector& NewLocation)
     return false;
 }
 
-bool AActor::SetActorRotation(const FVector& NewRotation)
+bool AActor::SetActorRotation(const FRotator& NewRotation)
 {
     if (RootComponent)
     {

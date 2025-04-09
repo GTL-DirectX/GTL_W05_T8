@@ -7,15 +7,13 @@
 
 ACube::ACube()
 {
-    FManagerOBJ::CreateStaticMesh("Assets/helloBlender.obj");
-    StaticMeshComponent->SetStaticMesh(FManagerOBJ::GetStaticMesh(L"helloBlender.obj"));
+    StaticMeshComponent->SetStaticMesh(FManagerOBJ::GetStaticMesh(L"Contents/helloBlender.obj"));
 }
 
 void ACube::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    
 
-    //SetActorLocation(GetActorLocation() + FVector(1.0f, 0.0f, 0.0f));
+    SetActorRotation(GetActorRotation() + FRotator(0, 0, 1));
 
 }

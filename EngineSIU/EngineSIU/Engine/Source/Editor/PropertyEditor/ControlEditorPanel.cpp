@@ -263,13 +263,13 @@ void ControlEditorPanel::CreateModifyButton(ImVec2 ButtonSize, ImFont* IconFont)
         };
 
         static const Primitive primitives[] = {
-            {.label = "Cube",      .obj = OBJ_CUBE },
-            {.label = "Sphere",    .obj = OBJ_SPHERE },
-            {.label = "PointLight", .obj = OBJ_PointLight },
-            {.label = "Particle",  .obj = OBJ_PARTICLE },
-            {.label = "Text",      .obj = OBJ_Text },
-            {.label = "Fireball",  .obj = OBJ_Fireball},
-            {.label = "Fog",       .obj = OBJ_Fog }
+            { .label= "Cube",      .obj= OBJ_CUBE },
+            { .label= "Sphere",    .obj= OBJ_SPHERE },
+            { .label= "PointLight", .obj= OBJ_PointLight },
+            { .label= "Particle",  .obj= OBJ_PARTICLE },
+            { .label= "Text",      .obj= OBJ_Text },
+            { .label= "Fireball",  .obj = OBJ_Fireball},
+            { .label= "Fog",       .obj= OBJ_Fog }
         };
 
         for (const auto& primitive : primitives)
@@ -322,7 +322,7 @@ void ControlEditorPanel::CreateModifyButton(ImVec2 ButtonSize, ImFont* IconFont)
                     TextComponent->SetTexture(L"Assets/Texture/font.png");
                     TextComponent->SetRowColumnCount(106, 106);
                     TextComponent->SetText(L"안녕하세요 Jungle 1");
-
+                    
                     break;
                 }
                 case OBJ_Fireball:
@@ -427,7 +427,7 @@ void ControlEditorPanel::CreateFlagButton() const
         ImGui::OpenPopup("ShowControl");
     }
 
-    const char* items[] = { "AABB", "Primitive", "BillBoard", "UUID", "Fog" };
+    const char* items[] = { "AABB", "Primitive", "BillBoard", "UUID" };
     uint64 ActiveViewportFlags = ActiveViewport->GetShowFlag();
 
     if (ImGui::BeginPopup("ShowControl"))
@@ -437,8 +437,7 @@ void ControlEditorPanel::CreateFlagButton() const
             (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_AABB)) != 0,
             (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_Primitives)) != 0,
             (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_BillboardText)) != 0,
-            (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_UUIDText)) != 0,
-            (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_Fog)) != 0
+            (ActiveViewportFlags & static_cast<uint64>(EEngineShowFlags::SF_UUIDText)) != 0
         };  // 각 항목의 체크 상태 저장
 
         for (int i = 0; i < IM_ARRAYSIZE(items); i++)
@@ -461,7 +460,7 @@ void ControlEditorPanel::CreatePIEButton(ImVec2 ButtonSize, ImFont* IconFont) co
     float CenterX = (WindowSize.x - ButtonSize.x) / 2.5f;
 
     ImGui::SetCursorScreenPos(ImVec2(CenterX - 40.0f, 10.0f));
-
+    
     if (ImGui::Button("\ue9a8", ButtonSize)) // Play
     {
         UE_LOG(LogLevel::Display, TEXT("PIE Button Clicked"));
@@ -474,7 +473,7 @@ void ControlEditorPanel::CreatePIEButton(ImVec2 ButtonSize, ImFont* IconFont) co
         UE_LOG(LogLevel::Display, TEXT("Stop Button Clicked"));
         Engine->EndPIE();
     }
-
+    
 }
 
 // code is so dirty / Please refactor
@@ -543,8 +542,6 @@ uint64 ControlEditorPanel::ConvertSelectionToFlags(const bool selected[]) const
         flags |= static_cast<uint64>(EEngineShowFlags::SF_BillboardText);
     if (selected[3])
         flags |= static_cast<uint64>(EEngineShowFlags::SF_UUIDText);
-    if (selected[4])
-        flags |= static_cast<uint64>(EEngineShowFlags::SF_Fog);
     return flags;
 }
 
