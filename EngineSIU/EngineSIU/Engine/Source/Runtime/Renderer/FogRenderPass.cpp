@@ -182,8 +182,6 @@ void FFogRenderPass::PrepareRender()
             FogComponents.Add(iter);
         }
     }
-    if (FogComponents.Num() > 0)
-        Graphics->PrepareTexture();
 }
 
 void FFogRenderPass::ClearRenderArr()
@@ -205,7 +203,7 @@ void FFogRenderPass::PrepareRenderState(ID3D11ShaderResourceView* DepthSRV)
     Graphics->DeviceContext->PSSetShader(FogPixelShader, nullptr, 0);
 
     // SRV & Sampler 바인딩
-    Graphics->DeviceContext->PSSetShaderResources(127, 1, &DepthSRV);
+    Graphics->DeviceContext->PSSetShaderResources(0, 1, &DepthSRV);
     Graphics->DeviceContext->PSSetSamplers(0, 1, &Sampler);
 }
 
@@ -360,8 +358,8 @@ void FFogRenderPass::PrepareFinalRender()
     Graphics->DeviceContext->PSSetShader(FogQuadPixelShader, nullptr, 0);
 
     // SRV & Sampler 바인딩
-    Graphics->DeviceContext->PSSetShaderResources(126, 1, &SceneSRV);
-    Graphics->DeviceContext->PSSetShaderResources(127, 1, &FogSRV);
+    Graphics->DeviceContext->PSSetShaderResources(0, 1, &SceneSRV);
+    Graphics->DeviceContext->PSSetShaderResources(1, 1, &FogSRV);
     Graphics->DeviceContext->PSSetSamplers(0, 1, &Sampler);
 }
 

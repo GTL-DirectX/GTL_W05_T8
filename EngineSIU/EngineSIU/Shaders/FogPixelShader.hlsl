@@ -1,4 +1,4 @@
-Texture2D SceneDepth : register(t127);
+Texture2D SceneDepth : register(t0);
 SamplerState Sampler : register(s0);
 
 cbuffer ConstantBuffer : register(b1)
