@@ -8,6 +8,7 @@
 #include <wchar.h>
 #include <UObject/UObjectIterator.h>
 #include <Engine/Engine.h>
+#include "PropertyEditor/ShowFlags.h"
 
 FFogRenderPass::FFogRenderPass()
     : Graphics(nullptr)
@@ -132,8 +133,6 @@ void FFogRenderPass::PrepareRender()
             FogComponents.Add(iter);
         }
     }
-    if (FogComponents.Num() > 0)
-        Graphics->PrepareTexture();
 }
 
 void FFogRenderPass::ClearRenderArr()
@@ -161,7 +160,8 @@ void FFogRenderPass::PrepareRenderState(ID3D11ShaderResourceView* DepthSRV)
 
 void FFogRenderPass::RenderFog(const std::shared_ptr<FEditorViewportClient>& ActiveViewport, ID3D11ShaderResourceView* DepthSRV)
 {
-    if (ActiveViewport->GetViewMode() == EViewModeIndex::VMI_Wireframe || FogComponents.Num() <= 0)
+    if (ActiveViewport->GetViewMode() == EViewModeIndex::VMI_Wireframe || FogComponents.Num() <= 0
+        || !(ActiveViewport->GetShowFlag() & static_cast<uint64>(EEngineShowFlags::SF_Fog)))
         return;
 
     D3D11_VIEWPORT vp = ActiveViewport->GetD3DViewport();
