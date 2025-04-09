@@ -1,5 +1,7 @@
 #include "GraphicDevice.h"
 #include <cwchar>
+#include "PropertyEditor/ShowFlags.h"
+#include "UnrealEd/EditorViewportClient.h"
 
 void FGraphicsDevice::Initialize(HWND hWindow)
 {
@@ -330,6 +332,13 @@ void FGraphicsDevice::Release()
 void FGraphicsDevice::SwapBuffer() const
 {
     SwapChain->Present(1, 0);
+}
+
+void FGraphicsDevice::Prepare(const std::shared_ptr<FEditorViewportClient>& ActiveViewport) const
+{
+    Prepare();
+    if ((ActiveViewport->GetShowFlag() & static_cast<uint64>(EEngineShowFlags::SF_Fog)))
+        PrepareTexture();
 }
 
 void FGraphicsDevice::Prepare() const
