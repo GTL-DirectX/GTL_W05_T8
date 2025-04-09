@@ -1,7 +1,7 @@
 
 #include "Renderer.h"
 #include "World/World.h"
-#include "Launch/EngineLoop.h"
+#include "Engine/EditorEngine.h"
 #include "UnrealEd/EditorViewportClient.h"
 #include "D3D11RHI/DXDShaderManager.h"
 #include "RendererHelpers.h"
@@ -117,7 +117,7 @@ void FRenderer::ClearRenderArr()
     FogRenderPass->ClearRenderArr();
 }
 
-void FRenderer::Render(UWorld* World, const std::shared_ptr<FEditorViewportClient>& ActiveViewport)
+void FRenderer::Render(const std::shared_ptr<FEditorViewportClient>& ActiveViewport)
 {
     Graphics->DeviceContext->RSSetViewports(1, &ActiveViewport->GetD3DViewport());
 
@@ -131,11 +131,11 @@ void FRenderer::Render(UWorld* World, const std::shared_ptr<FEditorViewportClien
     }
 
     StaticMeshRenderPass->Render(ActiveViewport);
-    LineRenderPass->Render(ActiveViewport);
-    BillboardRenderPass->Render(ActiveViewport);
     UpdateLightBufferPass->Render(ActiveViewport);
+    BillboardRenderPass->Render(ActiveViewport);
+    LineRenderPass->Render(ActiveViewport);
 
-    if (IsSceneDepth) 
+    if (IsSceneDepth)
     {
         DepthBufferDebugPass->RenderDepthBuffer(ActiveViewport);
     }
