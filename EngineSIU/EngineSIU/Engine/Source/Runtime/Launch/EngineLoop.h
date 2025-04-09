@@ -47,7 +47,10 @@ private:
     //TODO: GWorld 제거, Editor들 EditorEngine으로 넣기
     
     SLevelEditor* LevelEditor;
+
+    // UI관련인거 같음
     UnrealEd* UnrealEditor;
+
     FDXDBufferManager* bufferManager; //ToDo UEngine으로 옮겨야함.
 
     bool bIsExit = false;

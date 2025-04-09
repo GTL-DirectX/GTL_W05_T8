@@ -202,7 +202,7 @@ void UEditorEngine::HoverComponent(USceneComponent* InComponent)
     }
 }
 
-AEditorPlayer* UEditorEngine::GetEditorPlayer()
+AEditorPlayer* UEditorEngine::GetEditorPlayer() const
 {
     return EditorPlayer;
 }

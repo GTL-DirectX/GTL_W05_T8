@@ -47,7 +47,7 @@ public:
     void HoverComponent(USceneComponent* InComponent);
 
 public:
-    AEditorPlayer* GetEditorPlayer();
+    AEditorPlayer* GetEditorPlayer() const;
     
 private:
     AEditorPlayer* EditorPlayer = nullptr;
