@@ -15,6 +15,7 @@
 #include <UObject/UObjectIterator.h>
 #include <UObject/Casts.h>
 #include "GameFrameWork/Actor.h"
+#include "PropertyEditor/ShowFlags.h"
 
 //------------------------------------------------------------------------------
 // 초기화 및 해제 관련 함수
@@ -125,6 +126,9 @@ void FRenderer::Render(const std::shared_ptr<FEditorViewportClient>& ActiveViewp
 
     ChangeViewMode(ActiveViewport->GetViewMode());
 
+    if ((ActiveViewport->GetShowFlag() & static_cast<uint64>(EEngineShowFlags::SF_Fog)))
+        Graphics->PrepareTexture();
+
     StaticMeshRenderPass->Render(ActiveViewport);
     UpdateLightBufferPass->Render(ActiveViewport);
     BillboardRenderPass->Render(ActiveViewport);
@@ -135,7 +139,7 @@ void FRenderer::Render(const std::shared_ptr<FEditorViewportClient>& ActiveViewp
         DepthBufferDebugPass->RenderDepthBuffer(ActiveViewport);
     }
 
-    if (!IsSceneDepth)
+    if (!IsSceneDepth && (ActiveViewport->GetShowFlag() & static_cast<uint64>(EEngineShowFlags::SF_Fog)))
     {
         DepthBufferDebugPass->UpdateDepthBufferSRV();
         
