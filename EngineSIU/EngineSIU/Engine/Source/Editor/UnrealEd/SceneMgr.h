@@ -1,20 +1,24 @@
 #pragma once
-#include "Define.h"
 #include "Container/Map.h"
 
 class UObject;
-struct SceneData {
+
+struct _SceneData
+{
     int32 Version;
     int32 NextUUID;
     TMap<int32, UObject*> Primitives;
     TMap<int32, UObject*> Cameras;
 };
+
 class FSceneMgr
 {
 public:
-    static SceneData ParseSceneData(const FString& jsonStr);
+    [[deprecated]]
+    static _SceneData ParseSceneData(const FString& jsonStr);
+    [[deprecated]]
     static FString LoadSceneFromFile(const FString& filename);
-    static std::string SerializeSceneData(const SceneData& sceneData);
-    static bool SaveSceneToFile(const FString& filename, const SceneData& sceneData);
+    static std::string SerializeSceneData(const _SceneData& sceneData);
+    [[deprecated]]
+    static bool SaveSceneToFile(const FString& filename, const _SceneData& sceneData);
 };
-

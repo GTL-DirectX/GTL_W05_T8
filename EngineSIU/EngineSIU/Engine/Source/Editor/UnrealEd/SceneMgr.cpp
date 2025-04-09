@@ -18,9 +18,9 @@
 
 using json = nlohmann::json;
 
-SceneData FSceneMgr::ParseSceneData(const FString& jsonStr)
+_SceneData FSceneMgr::ParseSceneData(const FString& jsonStr)
 {
-    SceneData sceneData;
+    _SceneData sceneData;
 
     try {
         json j = json::parse(*jsonStr);
@@ -144,7 +144,7 @@ FString FSceneMgr::LoadSceneFromFile(const FString& filename)
     return j.dump(4);
 }
 
-std::string FSceneMgr::SerializeSceneData(const SceneData& sceneData)
+std::string FSceneMgr::SerializeSceneData(const _SceneData& sceneData)
 {
     json j;
 
@@ -196,7 +196,7 @@ std::string FSceneMgr::SerializeSceneData(const SceneData& sceneData)
     return j.dump(4); // 4는 들여쓰기 수준
 }
 
-bool FSceneMgr::SaveSceneToFile(const FString& filename, const SceneData& sceneData)
+bool FSceneMgr::SaveSceneToFile(const FString& filename, const _SceneData& sceneData)
 {
     std::ofstream outFile(*filename);
     if (!outFile) {
