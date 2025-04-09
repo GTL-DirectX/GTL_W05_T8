@@ -44,7 +44,7 @@ float4 mainPS(PS_INPUT input) : SV_Target
 
     // NDC 기준 ray 방향 (정규화된 뷰 방향)
     float2 ndc = float2(UV.x * 2.0 - 1.0, 1.0 - UV.y * 2.0);
-    float4 clip = float4(ndc.x, ndc.y, z_ndc, 1.0);
+    float4 clip = float4(ndc.x, ndc.y, 1.0, 1.0);
     float4 viewRay4 = mul(clip, InvViewProj);
     float3 viewRay = normalize(viewRay4.xyz - CameraPos);
 
@@ -65,10 +65,10 @@ float4 mainPS(PS_INPUT input) : SV_Target
     float CameraFogDistance = length(CameraPos - FogPosition);
     
     //안개 계수
-    float FogFactor = exp(saturate(-FogDensity * FogHeightFalloff * HeightDiff));
-    float CameraFogFactor = exp(saturate(-FogDensity * FogHeightFalloff * CameraHeightDiff));
+    float FogFactor = exp((-FogHeightFalloff * HeightDiff));
+    float CameraFogFactor = exp((-FogHeightFalloff * CameraHeightDiff));
     
-    float TotalFogFactor = (CameraFogFactor + FogFactor) / (max(FogHeightFalloff * distance, 1e-5f));
+    float TotalFogFactor = FogDensity * (CameraFogFactor - FogFactor) / (max(FogHeightFalloff * distance, 1e-5f));
     TotalFogFactor = saturate(TotalFogFactor);
     TotalFogFactor = min(TotalFogFactor, FogMaxOpacity);
     
