@@ -2,6 +2,9 @@
 #include <cwchar>
 #include "PropertyEditor/ShowFlags.h"
 #include "UnrealEd/EditorViewportClient.h"
+#include <Components/HeightFogComponent.h>
+#include <UObject/UObjectIterator.h>
+#include <Engine/Engine.h>
 
 void FGraphicsDevice::Initialize(HWND hWindow)
 {
@@ -337,7 +340,16 @@ void FGraphicsDevice::SwapBuffer() const
 void FGraphicsDevice::Prepare(const std::shared_ptr<FEditorViewportClient>& ActiveViewport) const
 {
     Prepare();
-    if ((ActiveViewport->GetShowFlag() & static_cast<uint64>(EEngineShowFlags::SF_Fog)))
+    //TODO: 다른 곳으로 빼자
+    TArray<UHeightFogComponent*> Fogs;
+    for (const auto iter : TObjectRange<UHeightFogComponent>())
+    {
+        if (iter->GetWorld() == GEngine->ActiveWorld)
+        {
+            Fogs.Add(iter);
+        }
+    }
+    if ((ActiveViewport->GetShowFlag() & static_cast<uint64>(EEngineShowFlags::SF_Fog)) && Fogs.Num() > 0)
         PrepareTexture();
 }
 
