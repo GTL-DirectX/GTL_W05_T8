@@ -206,11 +206,9 @@ void FEngineLoop::Tick()
             }
         }
 
-        float DeltaTime = elapsedTime / 1000.f;
-
         Input();
-        GEngine->Tick(DeltaTime);
-        LevelEditor->Tick(DeltaTime);
+        GEngine->Tick(elapsedTime);
+        LevelEditor->Tick(elapsedTime);
         Render();
         UIMgr->BeginFrame();
         UnrealEditor->Render();
@@ -227,7 +225,7 @@ void FEngineLoop::Tick()
         {
             Sleep(0);
             QueryPerformanceCounter(&endTime);
-            elapsedTime = (endTime.QuadPart - startTime.QuadPart) * 1000.f / frequency.QuadPart;
+            elapsedTime = (endTime.QuadPart - startTime.QuadPart) * 1000.0 / frequency.QuadPart;
         } while (elapsedTime < targetFrameTime);
     }
 }
