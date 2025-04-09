@@ -53,13 +53,21 @@ float4 mainPS(PS_INPUT input) : SV_Target
     float HeightFactor = exp(-HeightDiff * FogHeightFalloff);
    
      //카메라 까지의 거리 계산
-    float3 ToWorld = worldPos - CameraPos;
-    float distance = length(ToWorld);
+    float3 ToCamera = worldPos - CameraPos;
+    float distance = length(ToCamera);
+    
+    //안개 까지의 거리 계산
+    float3 ToFog = worldPos - FogPosition;
+    float FogDistance = length(ToFog);
     
     //안개 계수
-    float FogFactor = 1.0 - exp(-distance * FogDensity * HeightFactor);
+    float FogFactor = 1.0 - exp(-FogDistance * FogDensity * HeightFactor);
     FogFactor = saturate(FogFactor);
     FogFactor = min(FogFactor, FogMaxOpacity);
+    
+    float FadeRange = 10.0f;
+    float t = saturate((distance - StartDistance) / FadeRange);
+    FogFactor *= t;
     
     if (distance < StartDistance)
         FogFactor = 0;

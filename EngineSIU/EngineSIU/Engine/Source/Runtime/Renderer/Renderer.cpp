@@ -134,14 +134,13 @@ void FRenderer::Render(UWorld* World, const std::shared_ptr<FEditorViewportClien
             }
         }
     }
-
+    LineRenderPass->Render(ActiveViewport);
     if (Fogs.Num() > 0)
     {
         Graphics->PrepareTexture();
     }
 
     StaticMeshRenderPass->Render(ActiveViewport);
-    LineRenderPass->Render(ActiveViewport);
     BillboardRenderPass->Render(ActiveViewport);
     UpdateLightBufferPass->Render(ActiveViewport);
 

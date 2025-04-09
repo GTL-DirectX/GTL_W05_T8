@@ -267,6 +267,12 @@ void PropertyEditorPanel::Render()
                 FogComponent->SetFogHeightFalloff(FogHeightFallOff);
             }
 
+            float FogStartDistance = FogComponent->GetStartDistance();
+            if (ImGui::SliderFloat("Start Distance", &FogStartDistance, 0.00f, 50.0f))
+            {
+                FogComponent->SetStartDistance(FogStartDistance);
+            }
+
             ImGui::TreePop();
         }
         ImGui::PopStyleColor();
