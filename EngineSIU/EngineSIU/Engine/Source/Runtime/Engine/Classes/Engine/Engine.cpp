@@ -20,6 +20,7 @@ FWorldContext* UEngine::GetWorldContextFromWorld(const UWorld* InWorld)
 
 FWorldContext& UEngine::CreateNewWorldContext(EWorldType InWorldType)
 {
+    // TODO: 사용 끝나면 delete 해야함
     FWorldContext* NewWorldContext = new FWorldContext();
     WorldList.Add(NewWorldContext);
     NewWorldContext->WorldType = InWorldType;
