@@ -68,7 +68,7 @@ float4 mainPS(PS_INPUT input) : SV_Target
     float FogFactor = exp((-FogHeightFalloff * HeightDiff));
     float CameraFogFactor = exp((-FogHeightFalloff * CameraHeightDiff));
     
-    float TotalFogFactor = FogDensity * (CameraFogFactor - FogFactor) / (max(FogHeightFalloff * distance, 1e-5f));
+    float TotalFogFactor = FogDensity * (CameraFogFactor + FogFactor) / (max(FogHeightFalloff * distance, 1e-5f));
     TotalFogFactor = saturate(TotalFogFactor);
     TotalFogFactor = min(TotalFogFactor, FogMaxOpacity);
     
