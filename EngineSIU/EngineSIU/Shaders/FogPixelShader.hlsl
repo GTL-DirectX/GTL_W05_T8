@@ -65,7 +65,7 @@ float4 mainPS(PS_INPUT input) : SV_Target
     FogFactor = saturate(FogFactor);
     FogFactor = min(FogFactor, FogMaxOpacity);
     
-    float FadeRange = 10.0f;
+    float FadeRange = 50.0f;
     float t = saturate((distance - StartDistance) / FadeRange);
     FogFactor *= t;
     

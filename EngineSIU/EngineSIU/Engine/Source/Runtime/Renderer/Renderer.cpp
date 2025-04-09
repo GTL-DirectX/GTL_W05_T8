@@ -105,6 +105,7 @@ void FRenderer::PrepareRender()
     GizmoRenderPass->PrepareRender();
     BillboardRenderPass->PrepareRender();
     UpdateLightBufferPass->PrepareRender();
+    FogRenderPass->PrepareRender();
 }
 
 void FRenderer::ClearRenderArr()
@@ -113,6 +114,7 @@ void FRenderer::ClearRenderArr()
     BillboardRenderPass->ClearRenderArr();
     GizmoRenderPass->ClearRenderArr();
     UpdateLightBufferPass->ClearRenderArr();
+    FogRenderPass->ClearRenderArr();
 }
 
 void FRenderer::Render(UWorld* World, const std::shared_ptr<FEditorViewportClient>& ActiveViewport)
@@ -122,25 +124,14 @@ void FRenderer::Render(UWorld* World, const std::shared_ptr<FEditorViewportClien
     Graphics->ChangeRasterizer(ActiveViewport->GetViewMode());
 
     ChangeViewMode(ActiveViewport->GetViewMode());
-    TArray< UHeightFogComponent*> Fogs;
-    for (UHeightFogComponent* iter : TObjectRange<UHeightFogComponent>())
-    {
-        if(iter)
-        {
-            UWorld* FogWorld = iter->GetOwner()->GetWorld();
-            if (FogWorld == World && iter->GetFogDensity() != 0 && iter->GetFogMaxOpacity() != 0)
-            {
-                Fogs.Add(iter);
-            }
-        }
-    }
-    LineRenderPass->Render(ActiveViewport);
-    if (Fogs.Num() > 0)
+
+    if (FogRenderPass->ShouldRender())
     {
         Graphics->PrepareTexture();
     }
 
     StaticMeshRenderPass->Render(ActiveViewport);
+    LineRenderPass->Render(ActiveViewport);
     BillboardRenderPass->Render(ActiveViewport);
     UpdateLightBufferPass->Render(ActiveViewport);
 
@@ -149,11 +140,11 @@ void FRenderer::Render(UWorld* World, const std::shared_ptr<FEditorViewportClien
         DepthBufferDebugPass->RenderDepthBuffer(ActiveViewport);
     }
 
-    if (!IsSceneDepth && Fogs.Num()>0) 
+    if (!IsSceneDepth && FogRenderPass->ShouldRender())
     {
         DepthBufferDebugPass->UpdateDepthBufferSRV();
         
-        FogRenderPass->RenderFog(ActiveViewport, DepthBufferDebugPass->GetDepthSRV(), Fogs);
+        FogRenderPass->RenderFog(ActiveViewport, DepthBufferDebugPass->GetDepthSRV());
     }
 
     GizmoRenderPass->Render(ActiveViewport);

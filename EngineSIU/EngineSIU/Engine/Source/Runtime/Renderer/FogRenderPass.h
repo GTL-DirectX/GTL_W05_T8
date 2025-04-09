@@ -30,9 +30,11 @@ public:
 
     void PrepareRender();
 
+    void ClearRenderArr();
+
     void PrepareRenderState(ID3D11ShaderResourceView* DepthSRV);
     // Fog를 화면에 렌더링
-    void RenderFog(const std::shared_ptr<FEditorViewportClient>& ActiveViewport, ID3D11ShaderResourceView* DepthSRV, TArray< UHeightFogComponent*> Fogs);
+    void RenderFog(const std::shared_ptr<FEditorViewportClient>& ActiveViewport, ID3D11ShaderResourceView* DepthSRV);
 
     void CheckResize();
 
@@ -47,6 +49,8 @@ public:
     void FinalRender();
 
     void CreateRTV();
+
+    bool ShouldRender() { return bRender; }
 
 private:
     ID3D11SamplerState* Sampler = nullptr;

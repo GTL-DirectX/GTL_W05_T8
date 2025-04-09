@@ -177,8 +177,19 @@ void FFogRenderPass::PrepareRender()
 {
     for (const auto iter : TObjectRange<UHeightFogComponent>())
     {
-        //if(iter->GetOwner()->GetWorld() == GEngine->ActiveWorld)
+        if (iter->GetOwner()->GetWorld() == GEngine->ActiveWorld)
+        {
+            FogComponents.Add(iter);
+        }
     }
+    if (FogComponents.Num() > 0)
+        bRender = true;
+}
+
+void FFogRenderPass::ClearRenderArr()
+{
+    FogComponents.Empty();
+    bRender = false;
 }
 
 void FFogRenderPass::PrepareRenderState(ID3D11ShaderResourceView* DepthSRV)
@@ -199,7 +210,7 @@ void FFogRenderPass::PrepareRenderState(ID3D11ShaderResourceView* DepthSRV)
     Graphics->DeviceContext->PSSetSamplers(0, 1, &Sampler);
 }
 
-void FFogRenderPass::RenderFog(const std::shared_ptr<FEditorViewportClient>& ActiveViewport, ID3D11ShaderResourceView* DepthSRV, TArray< UHeightFogComponent*> Fogs)
+void FFogRenderPass::RenderFog(const std::shared_ptr<FEditorViewportClient>& ActiveViewport, ID3D11ShaderResourceView* DepthSRV)
 {
     D3D11_VIEWPORT vp = ActiveViewport->GetD3DViewport();
     CheckResize();
@@ -208,7 +219,7 @@ void FFogRenderPass::RenderFog(const std::shared_ptr<FEditorViewportClient>& Act
 
     PrepareRenderState(DepthSRV);
 
-    for (const auto& Fog : Fogs)
+    for (const auto& Fog : FogComponents)
     {
         UpdateFogConstant(ActiveViewport, Fog);
 
