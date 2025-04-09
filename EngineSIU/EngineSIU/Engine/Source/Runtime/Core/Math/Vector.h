@@ -153,6 +153,8 @@ public:
 
     bool IsNearlyZero(float Tolerance = SMALL_NUMBER) const;
     bool IsZero() const;
+
+    FString ToString() const;
 };
 
 
@@ -364,6 +366,11 @@ inline bool FVector::IsNearlyZero(float Tolerance) const
 inline bool FVector::IsZero() const
 {
     return X==0.f && Y==0.f && Z==0.f;
+}
+
+inline FString FVector::ToString() const
+{
+    return FString::Printf(TEXT("X=%3.3f Y=%3.3f Z=%3.3f"), X, Y, Z);
 }
 
 inline FArchive& operator<<(FArchive& Ar, FVector2D& V)

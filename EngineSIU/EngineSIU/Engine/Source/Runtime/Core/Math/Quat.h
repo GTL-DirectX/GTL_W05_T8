@@ -110,6 +110,11 @@ struct FQuat
 
 		return RotationMatrix;
 	}
+
+    FString ToString() const
+    {
+	    return FString::Printf(TEXT("X=%.9f Y=%.9f Z=%.9f W=%.9f"), X, Y, Z, W);
+    }
 };
 
 inline FArchive& operator<<(FArchive& Ar, FQuat& Q)

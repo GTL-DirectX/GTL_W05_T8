@@ -21,6 +21,8 @@ struct FVector4
     FVector4 operator-(const FVector4& Other) const;
 
     FVector4 operator/(float Scalar) const;
+
+    FString ToString() const;
 };
 
 inline FVector4 FVector4::operator-(const FVector4& Other) const
@@ -51,6 +53,11 @@ inline FVector4 FVector4::operator/(float Scalar) const
         Z / Scalar,
         W / Scalar
     };
+}
+
+inline FString FVector4::ToString() const
+{
+    return FString::Printf(TEXT("X=%3.3f Y=%3.3f Z=%3.3f W=%3.3f"), X, Y, Z, W);
 }
 
 inline FArchive& operator<<(FArchive& Ar, FVector4& V)

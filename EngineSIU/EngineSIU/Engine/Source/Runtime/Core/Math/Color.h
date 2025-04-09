@@ -30,8 +30,8 @@ struct FColor
     uint32& DWColor() { return Bits; }
     const uint32& DWColor() const { return Bits; }
 
-    FColor() : B(0), G(0), R(0), A(255) {}
-    FColor(uint8 InR, uint8 InG, uint8 InB, uint8 InA = 255) : B(InB), G(InG), R(InR), A(InA) {}
+    constexpr FColor() : B(0), G(0), R(0), A(255) {}
+    constexpr FColor(uint8 InR, uint8 InG, uint8 InB, uint8 InA = 255) : B(InB), G(InG), R(InR), A(InA) {}
     FColor(uint32 InColor)
     {
         DWColor() = InColor;
@@ -68,6 +68,10 @@ struct FColor
         A = (uint8)FMath::Min((int32)A + (int32)Other.A, 255);
     }
 
+    FString ToString() const
+    {
+        return FString::Printf(TEXT("(R=%i,G=%i,B=%i,A=%i)"), R, G, B, A);
+    }
 
     static const FColor White;
     static const FColor Black;
@@ -87,22 +91,31 @@ struct FColor
 
 struct FLinearColor
 {
-    float R;
-    float G;
-    float B;
-    float A;
-    FLinearColor() : R(0), G(0), B(0), A(0) {}
-    FLinearColor(float InR, float InG, float InB, float InA = 1.0f) : R(InR), G(InG), B(InB), A(InA) {}
+    float R, G, B, A;
+
+    FLinearColor()
+        : R(0), G(0), B(0), A(0)
+    {}
+
+    FLinearColor(float InR, float InG, float InB, float InA = 1.0f)
+        : R(InR), G(InG), B(InB), A(InA)
+    {}
 
     // FVector4 생성자와의 혼동을 피하기 위해 explicit으로 유지할 것.
-    explicit FLinearColor(const FVector& InVector) : R(InVector.X), G(InVector.Y), B(InVector.Z), A(1.0f) {}
+    explicit FLinearColor(const FVector& InVector)
+        : R(InVector.X), G(InVector.Y), B(InVector.Z), A(1.0f)
+    {}
 
     // FVector 생성자와의 혼동을 피하기 위해 explicit으로 유지할 것.
-    explicit FLinearColor(const FVector4& InVector) : R(InVector.X), G(InVector.Y), B(InVector.Z), A(InVector.W) {}
+    explicit FLinearColor(const FVector4& InVector)
+        : R(InVector.X), G(InVector.Y), B(InVector.Z), A(InVector.W)
+    {}
 
     constexpr FLinearColor(const FColor& InColor)
-        : R(InColor.R / 255.0f), G(InColor.G / 255.0f), B(InColor.B / 255.0f), A(InColor.A / 255.0f) {
-    }
+        : R(InColor.R / 255.0f), G(InColor.G / 255.0f), B(InColor.B / 255.0f), A(InColor.A / 255.0f)
+    {}
+
+    FString ToString() const;
 
     // Serializer
     friend FArchive& operator<<(FArchive& Ar, FLinearColor& Color)
@@ -278,6 +291,4 @@ struct FLinearColor
     {
         return FMath::Min(R, FMath::Min(G, FMath::Min(B, A)));
     }
-
-    FString ToString() const;
 };

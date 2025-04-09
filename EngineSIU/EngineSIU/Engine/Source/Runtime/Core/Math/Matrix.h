@@ -34,6 +34,8 @@ public:
 
     FVector4 TransformFVector4(const FVector4& vector) const;
     FVector TransformPosition(const FVector& vector) const;
+
+    FString ToString() const;
 };
 
 inline FArchive& operator<<(FArchive& Ar, FMatrix& M)
