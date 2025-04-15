@@ -2,21 +2,15 @@
 #include "EngineStatics.h"
 #include "Object.h"
 #include "Class.h"
-#include "Define.h"
 #include "UObjectArray.h"
-#include "UserInterface/Console.h"
 
 class FObjectFactory
 {
 public:
-    static UObject* ConstructObject(UClass* InClass, UObject* InOuter, FName InName = NAME_None)
+    static UObject* ConstructObject(UClass* InClass, UObject* InOuter)
     {
         const uint32 Id = UEngineStatics::GenUUID();
-        FString Name = InClass->GetName() + "_" + std::to_string(Id);
-        if (InName != NAME_None)
-        {
-            Name = InName.ToString();
-        }
+        const FString Name = InClass->GetName() + "_" + std::to_string(Id);
 
         UObject* Obj = InClass->ClassCTOR();
         Obj->ClassPrivate = InClass;

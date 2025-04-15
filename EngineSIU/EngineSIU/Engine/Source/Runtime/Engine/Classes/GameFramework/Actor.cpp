@@ -117,44 +117,26 @@ bool AActor::Destroy()
     return IsActorBeingDestroyed();
 }
 
-UActorComponent* AActor::AddComponent(UClass* InClass, FName InName, bool bTryRootComponent)
+UActorComponent* AActor::AddComponent(UClass* InClass)
 {
-
-    if (!InClass)
-    {
-        UE_LOG(LogLevel::Error, TEXT("UActorComponent failed: ComponentClass is null."));
-        return nullptr;
-    }
-    
     if (InClass->IsChildOf<UActorComponent>())
     {
-        UActorComponent* Component = static_cast<UActorComponent*>(FObjectFactory::ConstructObject(InClass, this, InName));
-
-        if (!Component)
-        {
-            UE_LOG(LogLevel::Error, TEXT("UActorComponent failed: Class '%s' is not derived from AActor."), *InClass->GetName());
-            return nullptr;
-        }
-        
+        UActorComponent* Component = static_cast<UActorComponent*>(FObjectFactory::ConstructObject(InClass, this));
         OwnedComponents.Add(Component);
         Component->OwnerPrivate = this;
 
         // 만약 SceneComponent를 상속 받았다면
-
-        if (bTryRootComponent)
+        if (USceneComponent* NewSceneComp = Cast<USceneComponent>(Component))
         {
-            if (USceneComponent* SceneComp = Cast<USceneComponent>(Component))
+            if (RootComponent == nullptr)
             {
-                if (RootComponent == nullptr)
-                {
-                    RootComponent = SceneComp;
-                }
-            // TODO: 나중에 RegisterComponent() 생기면 주석 해제
-                // else
-                // {
-                //     SceneComp->SetupAttachment(RootComponent);
-                // }
+                RootComponent = NewSceneComp;
             }
+            // TODO: 나중에 RegisterComponent() 생기면 주석 해제
+            // else
+            // {
+            //     NewSceneComp->SetupAttachment(RootComponent);
+            // }
         }
 
         // TODO: RegisterComponent() 생기면 제거
@@ -162,8 +144,6 @@ UActorComponent* AActor::AddComponent(UClass* InClass, FName InName, bool bTryRo
 
         return Component;
     }
-    
-    UE_LOG(LogLevel::Error, TEXT("UActorComponent failed: ComponentClass is null."));
     return nullptr;
 }
 

@@ -19,12 +19,6 @@ public:
     void GetUsedMaterials(TArray<UMaterial*>& Out) const;
     OBJ::FStaticMeshRenderData* GetRenderData() const { return staticMeshRenderData; }
 
-    //ObjectName은 경로까지 포함
-    FWString GetOjbectName() const
-    {
-        return staticMeshRenderData->ObjectName;
-    }
-
     void SetData(OBJ::FStaticMeshRenderData* renderData);
 
 private:

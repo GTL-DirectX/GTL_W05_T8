@@ -25,41 +25,11 @@ UObject* UBillboardComponent::Duplicate(UObject* InOuter)
     {
         NewComponent->finalIndexU = finalIndexU;
         NewComponent->finalIndexV = finalIndexV;
-        NewComponent->Texture = FEngineLoop::ResourceManager.GetTexture(TexturePath.ToWideString());
-        NewComponent->TexturePath = TexturePath;
+        NewComponent->Texture = FEngineLoop::ResourceManager.GetTexture(BufferKey.ToWideString());
+        NewComponent->BufferKey = BufferKey;
         NewComponent->m_parent = m_parent;
     }
     return NewComponent;
-}
-
-void UBillboardComponent::GetProperties(TMap<FString, FString>& OutProperties) const
-{
-    Super::GetProperties(OutProperties);
-    OutProperties.Add(TEXT("FinalIndexU"), FString::Printf(TEXT("%f"), finalIndexU));
-    OutProperties.Add(TEXT("FinalIndexV"), FString::Printf(TEXT("%f"), finalIndexV));
-    OutProperties.Add(TEXT("BufferKey"), TexturePath);
-}
-
-void UBillboardComponent::SetProperties(const TMap<FString, FString>& InProperties)
-{
-    Super::SetProperties(InProperties);
-    const FString* TempStr = nullptr;
-    TempStr = InProperties.Find(TEXT("FinalIndexU"));
-    if (TempStr)
-    {
-        finalIndexU = FString::ToFloat(*TempStr);
-    }
-    TempStr = InProperties.Find(TEXT("FinalIndexV"));
-    if (TempStr)
-    {
-        finalIndexV = FString::ToFloat(*TempStr);
-    }
-    TempStr = InProperties.Find(TEXT("BufferKey"));
-    if (TempStr)
-    {
-        TexturePath = *TempStr;
-        Texture = FEngineLoop::ResourceManager.GetTexture(TempStr->ToWideString());
-    }
 }
 
 void UBillboardComponent::InitializeComponent()
@@ -71,6 +41,10 @@ void UBillboardComponent::InitializeComponent()
 void UBillboardComponent::TickComponent(float DeltaTime)
 {
     Super::TickComponent(DeltaTime);
+}
+FString UBillboardComponent::GetBufferKey()
+{
+    return BufferKey;
 }
 
 int UBillboardComponent::CheckRayIntersection(FVector& rayOrigin, FVector& rayDirection, float& pfNearHitDistance)
@@ -89,8 +63,8 @@ int UBillboardComponent::CheckRayIntersection(FVector& rayOrigin, FVector& rayDi
 void UBillboardComponent::SetTexture(const FWString& _fileName)
 {
     Texture = FEngineLoop::ResourceManager.GetTexture(_fileName);
-    TexturePath = FString(_fileName.c_str());
-    //std::string str(_fileName.begin(), _fileName.end());
+    std::string str(_fileName.begin(), _fileName.end());
+    BufferKey = FString(str);
 }
 
 void UBillboardComponent::SetUUIDParent(USceneComponent* _parent)

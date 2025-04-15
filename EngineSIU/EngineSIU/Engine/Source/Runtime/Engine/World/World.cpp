@@ -7,11 +7,6 @@
 #include "Components/SkySphereComponent.h"
 #include "Engine/FLoaderOBJ.h"
 #include "Actors/HeightFogActor.h"
-#include "Engine/EditorEngine.h"
-#include "Engine/Engine.h"
-#include "UnrealEd/SceneManager.h"
-
-class UEditorEngine;
 
 UWorld* UWorld::CreateWorld(UObject* InOuter, const EWorldType InWorldType, const FString& InWorldName)
 {
@@ -66,29 +61,28 @@ void UWorld::Release()
 {
     if (ActiveLevel)
     {
-        ActiveLevel->Release();
-        GUObjectArray.MarkRemoveObject(ActiveLevel);
+	    for (AActor* Actor : ActiveLevel->Actors)
+	    {
+		    Actor->EndPlay(EEndPlayReason::WorldTransition);
+            TSet<UActorComponent*> Components = Actor->GetComponents();
+	        for (UActorComponent* Component : Components)
+	        {
+	            GUObjectArray.MarkRemoveObject(Component);
+	        }
+	        GUObjectArray.MarkRemoveObject(Actor);
+	    }
+        ActiveLevel->Actors.Empty();
         ActiveLevel = nullptr;
     }
-    
+
     GUObjectArray.ProcessPendingDestroyObjects();
 }
 
-AActor* UWorld::SpawnActor(UClass* InClass, FName InActorName)
+AActor* UWorld::SpawnActor(UClass* InClass)
 {
-    if (!InClass)
-    {
-        UE_LOG(LogLevel::Error, TEXT("SpawnActor failed: ActorClass is null."));
-        return nullptr;
-    }
-
-    
-    // TODO: SpawnParams에서 이름 가져오거나, 필요시 여기서 자동 생성
-    // if (SpawnParams.Name != NAME_None) ActorName = SpawnParams.Name;
-    
     if (InClass->IsChildOf<AActor>())
     {
-        AActor* NewActor = Cast<AActor>(FObjectFactory::ConstructObject(InClass, this, InActorName));
+        AActor* NewActor = Cast<AActor>(FObjectFactory::ConstructObject(InClass, this));
         // TODO: 일단 AddComponent에서 Component마다 초기화
         // 추후에 RegisterComponent() 만들어지면 주석 해제
         // Actor->InitializeComponents();
@@ -96,8 +90,6 @@ AActor* UWorld::SpawnActor(UClass* InClass, FName InActorName)
         PendingBeginPlayActors.Add(NewActor);
         return NewActor;
     }
-    
-    UE_LOG(LogLevel::Error, TEXT("SpawnActor failed: Class '%s' is not derived from AActor."), *InClass->GetName());
     return nullptr;
 }
 
@@ -112,10 +104,6 @@ bool UWorld::DestroyActor(AActor* ThisActor)
     {
         return true;
     }
-    
-    // UEditorEngine* Engine = Cast<UEditorEngine>(GEngine);
-    //
-    // Engine->DeselectActor(ThisActor);
 
     // 액터의 Destroyed 호출
     ThisActor->Destroyed();
@@ -143,4 +131,3 @@ UWorld* UWorld::GetWorld() const
 {
     return const_cast<UWorld*>(this);
 }
-

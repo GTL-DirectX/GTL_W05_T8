@@ -34,7 +34,7 @@ public:
      * @param InClass Spawn할 Actor 정보
      * @return Spawn된 Actor
      */
-    AActor* SpawnActor(UClass* InClass, FName InActorName = NAME_None);
+    AActor* SpawnActor(UClass* InClass);
 
     /** 
      * World에 Actor를 Spawn합니다.
@@ -56,7 +56,6 @@ public:
     T* DuplicateActor(T* InActor);
 
     EWorldType WorldType = EWorldType::None;
-
     
 private:
     FString WorldName = "DefaultWorld";
